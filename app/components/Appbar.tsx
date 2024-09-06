@@ -8,7 +8,7 @@ import { twMerge } from "tailwind-merge";
 //   WalletDisconnectButton,
 //   WalletMultiButton,
 // } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
+// import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Appbar = () => {
   const session = useSession();
