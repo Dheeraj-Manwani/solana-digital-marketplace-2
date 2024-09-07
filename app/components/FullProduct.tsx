@@ -3,14 +3,15 @@
 import React from "react";
 import { Button } from "./Button";
 // import Image from "next/image";
-// import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { ImageCarousel } from "./Carousel";
 
 export const FullProduct = ({
   // id,
   title,
   description,
   cost,
-  // images,
+  images,
   handleBuy,
 }: {
   id: number;
@@ -29,16 +30,20 @@ export const FullProduct = ({
               className="w-full hidden"
               src={images[0]}
               alt=""
-              width={5}
-              height={5}
+              width={500}
+              height={500}
+              unoptimized
             />
             <Image
               className="w-full block"
               src={images[0]}
               alt=""
-              width={5}
-              height={5}
+              width={500}
+              height={500}
+              unoptimized
             /> */}
+
+            <ImageCarousel images={images} />
           </div>
 
           <div className="mt-6 sm:mt-8 lg:mt-0">
@@ -123,7 +128,7 @@ export const FullProduct = ({
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
               <Button onClick={() => handleBuy()}>Buy Now </Button>
 
-              {/* <WalletMultiButton /> */}
+              <WalletMultiButton />
               {/* <a
                 href="#"
                 title=""

@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Icon } from "./Icon";
 import { checkValidImageExtension } from "@/app/lib/utils";
 import { toast } from "sonner";
-// import Image from "next/image";
+import Image from "next/image";
 // import { uploadFile } from "@/actions/index";
 
 export const firebaseConfig = {
@@ -25,6 +25,24 @@ export const storage = getStorage(
   `gs://${process.env.NEXT_PUBLIC_STORAGE_BUCKET}`
 );
 
+export const uploadAttachment = async (
+  file: File,
+  extension: string,
+  folder: string
+) => {
+  const fileNameWithoutSpecialChars = file?.name.replace(/[^a-zA-Z0-9]/g, "");
+  const fileName = fileNameWithoutSpecialChars.slice(0, -extension.length);
+  const storageRef = ref(
+    storage,
+    `${folder}/${fileName + uuidv4() + "." + extension}`
+  );
+
+  await uploadBytes(storageRef, file);
+
+  const url = await getDownloadURL(storageRef);
+  return url;
+};
+
 export function MultiFilepnd({
   label,
   src,
@@ -40,22 +58,25 @@ export function MultiFilepnd({
       const splittedFile = file.name.split(".");
       const extension = splittedFile[splittedFile.length - 1];
       if (!checkValidImageExtension(extension)) {
+        toast.error("Invalid image file.");
         return;
       }
       const toastId = toast.loading("Uploading file, please wait...");
-      const fileNameWithoutSpecialChars = file?.name.replace(
-        /[^a-zA-Z0-9]/g,
-        ""
-      );
-      const fileName = fileNameWithoutSpecialChars.slice(0, -extension.length);
-      const storageRef = ref(
-        storage,
-        `Products/${fileName + uuidv4() + "." + extension}`
-      );
+      // const fileNameWithoutSpecialChars = file?.name.replace(
+      //   /[^a-zA-Z0-9]/g,
+      //   ""
+      // );
+      // const fileName = fileNameWithoutSpecialChars.slice(0, -extension.length);
+      // const storageRef = ref(
+      //   storage,
+      //   `Products/${fileName + uuidv4() + "." + extension}`
+      // );
 
-      await uploadBytes(storageRef, file);
+      // await uploadBytes(storageRef, file);
 
-      const url = await getDownloadURL(storageRef);
+      // const url = await getDownloadURL(storageRef);
+
+      const url = await uploadAttachment(file, extension, "Product_Images");
       toast.success("File Uploaded!", { id: toastId });
       const newUrlList = [...src, url];
       setSrc(newUrlList);
@@ -89,14 +110,14 @@ export function MultiFilepnd({
                     style="size-6 absolute rounded-[50%] cursor-pointer"
                   />
                 </button>
-                {/* <Image
-                  height={5}
-                  width={5}
+                <Image
+                  height={300}
+                  width={300}
                   alt="Profile Pic"
                   className="rounded-lg z-10 p-2 w-52"
                   src={href}
                   id="profile-image"
-                /> */}
+                />
               </div>
             ))
           ) : (

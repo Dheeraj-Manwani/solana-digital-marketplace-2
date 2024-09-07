@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Textarea } from "@/app/components/Textarea";
 import { Input } from "@/app/components/Input";
-import { MultiFilepnd } from "@/app/components/MultiFilepond";
+import { MultiFilepnd, uploadAttachment } from "@/app/components/MultiFilepond";
 import { Button } from "@/app/components/Button";
 import { saveProduct } from "@/actions";
 import { useSession } from "next-auth/react";
@@ -11,24 +11,39 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Product } from "@/app/lib/zod";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-// import { useWallet } from "@solana/wallet-adapter-react";
-// import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Attachment } from "@/app/components/Attachment";
+import { AlertWarning } from "@/app/components/Alert";
+import { AUTH } from "@/app/lib/data";
 
 export default function NewProduct() {
   const session = useSession();
   const router = useRouter();
-  // const { publicKey, signMessage } = useWallet();
+  const { publicKey, signMessage } = useWallet();
 
   const [imgUrl, setImgUrl] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [cost, setCost] = useState("");
   const [description, setDescription] = useState("");
+  const [asset, setAsset] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (session.status === AUTH.UN_AUTHENTICATED) {
+      // signIn("google");
+    }
+    console.log("session inside the use eff  ", session);
+  }, [session.status]);
 
   const handleSubmit = async () => {
-    // if (!publicKey) {
-    //   toast.error("Please connect a wallet for payment");
-    //   return;
-    // }
+    if (!publicKey) {
+      toast.error("Please connect a wallet for payment");
+      return;
+    }
+
+    if (!asset) {
+      toast.error("Upload the product to sell");
+      return;
+    }
 
     const zodres = Product.safeParse({
       // @ts-expect-error aaaaaaaaaaaaaaaaaaaa
@@ -45,13 +60,20 @@ export default function NewProduct() {
       return;
     }
 
-    // const message = new TextEncoder().encode(
-    //   "Sign in to project made by Dheeraj for Solana 100xdevs hackathon?"
-    // );
-    // const signature = await signMessage?.(message);
+    const message = new TextEncoder().encode(
+      "Sign in to project made by Dheeraj for Solana 100xdevs hackathon?"
+    );
+    const signature = await signMessage?.(message);
 
     if (session.data) {
       const toastId = toast.loading("Submitting Product...");
+      const splittedFile = asset.name.split(".");
+      const extension = splittedFile[splittedFile.length - 1];
+      const assetLink = await uploadAttachment(
+        asset,
+        extension,
+        "PRODUCT_ASSETS"
+      );
       const { success, message } = await saveProduct(
         // @ts-expect-error aaaaaaaaaaaaaaaaaaaaa
         // aaaaaaaaaaaaaaaaaaa
@@ -59,9 +81,10 @@ export default function NewProduct() {
         title,
         description,
         Number(cost),
-        imgUrl
-        // publicKey.toString(),
-        // signature
+        imgUrl,
+        publicKey.toString(),
+        signature,
+        assetLink
       );
       if (success) {
         toast.success(message, { id: toastId });
@@ -88,35 +111,44 @@ export default function NewProduct() {
         <Input
           type="text"
           label="Product Title"
+          placeholder="Title"
           value={title}
           onChange={setTitle}
         />
-        <Input
-          type="number"
-          label="Product Cost in SOL"
-          value={cost}
-          onChange={setCost}
-        />
+        <div className="flex justify-between w-full ">
+          <div className="w-1/2">
+            <Input
+              type="number"
+              label="Product Cost in SOL"
+              placeholder="Cost"
+              value={cost}
+              onChange={setCost}
+            />
+          </div>
+          <div className="flex gap-5">
+            <div className=" text-sm font-medium  text-white my-auto">
+              Recieving wallet:{" "}
+            </div>
+            <div className="m-auto">
+              <WalletMultiButton />
+            </div>
+          </div>
+        </div>
         <Textarea
           label="Product Description"
           value={description}
           onChange={setDescription}
-          placeholder="asacav"
+          placeholder="Description"
         />
-        <MultiFilepnd src={imgUrl} setSrc={setImgUrl} label="Product Images" />
-        {/* {session.data?.user?.publicKey ? (
-          <div className="block my-4 text-sm font-medium  text-white">
-            Public key for payment : {session.data?.user.publicKey}
-          </div>
-        ) : (
-          <></>
-        )} */}
-        <div className="flex gap-5 my-8">
-          <div className=" text-sm font-medium  text-white my-auto">
-            Wallet for payment:{" "}
-          </div>
-          <WalletMultiButton />
-        </div>
+        <MultiFilepnd
+          src={imgUrl}
+          setSrc={setImgUrl}
+          label="Product Images (watermarked / for user's reference)"
+        />
+
+        <Attachment label="Product *" value={asset} onChange={setAsset} />
+        <AlertWarning />
+
         <div className="mt-10 flex justify-center">
           <Button onClick={handleSubmit} style="w-1/2">
             Submit

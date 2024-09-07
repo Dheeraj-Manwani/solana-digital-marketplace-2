@@ -27,6 +27,7 @@ model Product {
   id           Int       @id @default(autoincrement())
   title        String
   cost         Int
+  asset        String
   payTo        String?
   description  String?
   images       Image[]

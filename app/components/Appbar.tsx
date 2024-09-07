@@ -24,7 +24,7 @@ export const Appbar = () => {
           className="flex items-center space-x-3 rtl:space-x-reverse w-10"
         >
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
-            SolMart
+            SolKart
           </span>
         </a>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse w-10">
@@ -39,7 +39,7 @@ export const Appbar = () => {
           ) : (
             <Button
               onClick={() => {
-                signIn();
+                signIn("google");
               }}
             >
               Signin

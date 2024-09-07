@@ -1,4 +1,4 @@
-// import Image from "next/image";
+import Image from "next/image";
 import React from "react";
 
 export const Hero = ({
@@ -50,12 +50,12 @@ export const Hero = ({
           )}
         </div>
         <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-          {/* <Image
-            height={5}
-            width={5}
+          <Image
+            height={300}
+            width={500}
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
             alt="mockup"
-          /> */}
+          />
         </div>
       </div>
     </section>

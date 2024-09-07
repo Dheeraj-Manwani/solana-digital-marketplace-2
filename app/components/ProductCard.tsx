@@ -3,7 +3,7 @@
 // import Image from "next/image";
 import React from "react";
 // import { Button } from "./Button";
-import { v4 as uuidv4 } from "uuid";
+import { ImageCarousel } from "./Carousel";
 
 export const ProductCard = ({
   id,
@@ -24,14 +24,16 @@ export const ProductCard = ({
       className="w-full min-h-52 m-auto flex flex-col items-center border  rounded-lg shadow md:flex-row md:max-w-2xl  border-gray-700 bg-gray-800 "
       key={id}
     >
-      {images.map((i) => (
+      {/* {images.map((i) => (
         <img
           key={uuidv4()}
           className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
           src={i}
           alt=""
         />
-      ))}
+      ))} */}
+
+      <ImageCarousel className="max-w-xs" images={images} />
       {/* <Image
         width={5}
         height={5}
@@ -39,16 +41,13 @@ export const ProductCard = ({
         src={images[0]}
         alt=""
       /> */}
-      <div className="flex flex-col w-full min-h-[180px] p-4 leading-normal justify-between">
+      <div className="flex flex-col w-full min-h-[240px] p-4 leading-normal justify-between">
         <div className="flex flex-col justify-between">
           <h5 className="mb-2 text-2xl font-bold tracking-tight  text-white">
             {title}
           </h5>
           <p className="mb-3 font-normal  text-gray-400">{description}</p>
         </div>
-        {/* <div>
-          <div className="">{cost}</div>
-        </div> */}
         <div className="flex justify-between w-full">
           <span className="text-3xl font-bold  text-white">
             {cost / 1_000_000_000} SOL

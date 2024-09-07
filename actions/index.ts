@@ -3,21 +3,32 @@
 import db from "@/app/db";
 import nacl from "tweetnacl";
 import { Product } from "@/app/lib/zod";
-// import { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 // import { EmailTemplate } from "@/components/email-template";
-// import { Resend } from "resend";
+import { Resend } from "resend";
+import { EmailTemplate } from "@/app/components/email-template";
 // import { useConnection } from "@solana/wallet-adapter-react";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const saveProduct = async (
   id: number,
   title: string,
   description: string,
   cost: number,
-  images: string[]
-  // publicKey: string,
-  // signature: any
+  images: string[],
+  publicKey: string,
+  signature: any,
+  asset: string
 ) => {
-  const zodres = Product.safeParse({ id, title, description, cost, images });
+  const zodres = Product.safeParse({
+    id,
+    title,
+    description,
+    cost,
+    images,
+    asset,
+  });
 
   if (zodres.success) {
     //
@@ -25,44 +36,45 @@ export const saveProduct = async (
       "Sign in to project made by Dheeraj for Solana 100xdevs hackathon?"
     );
 
-    // const result = nacl.sign.detached.verify(
-    //   message,
-    //   new Uint8Array(signature.data),
-    //   new PublicKey(publicKey).toBytes()
-    // );
-    // if (result) {
-    const product = await db.user.update({
-      where: {
-        id,
-      },
-      data: {
-        products: {
-          create: [
-            {
-              title: title,
-              description: description,
-              cost: cost * 1_000_000_000,
-              payTo: "publicKey",
-              images: {
-                createMany: {
-                  data: images.map((img) => {
-                    return { imageUrl: img };
-                  }),
+    const result = nacl.sign.detached.verify(
+      message,
+      new Uint8Array(signature.data),
+      new PublicKey(publicKey).toBytes()
+    );
+    if (result) {
+      const product = await db.user.update({
+        where: {
+          id,
+        },
+        data: {
+          products: {
+            create: [
+              {
+                title: title,
+                description: description,
+                cost: cost * 1_000_000_000,
+                payTo: publicKey,
+                asset: asset,
+                images: {
+                  createMany: {
+                    data: images.map((img) => {
+                      return { imageUrl: img };
+                    }),
+                  },
                 },
               },
-            },
-          ],
+            ],
+          },
         },
-      },
-    });
+      });
 
-    return { success: true, message: "Product created successfully!!" };
-    // } else {
-    //   return {
-    //     success: false,
-    //     message: "Wallet verification failed",
-    //   };
-    // }
+      return { success: true, message: "Product created successfully!!" };
+    } else {
+      return {
+        success: false,
+        message: "Wallet verification failed",
+      };
+    }
   } else {
     return { success: false, message: zodres.error.issues[0].message };
   }
@@ -118,4 +130,24 @@ export const verifyTransactionSignature = async (signature: string) => {
   // });
 
   return true;
+};
+
+export const sendAssetMail = async (
+  sellerId: number,
+  productId: number,
+  buyerId: number
+) => {
+  const { data, error } = await resend.emails.send({
+    from: "dkmanwani2000@gmail.com",
+    to: ["dheerajmanwani2000@gmail.com"],
+    subject: "Hello world",
+    react: EmailTemplate({ username: "John" }),
+  });
+
+  console.log("inside resend mail====]]]]]]]]]]]]", data, error);
+
+  if (error) {
+    return { success: false, message: "Something went wrong" };
+  }
+  return { success: true };
 };

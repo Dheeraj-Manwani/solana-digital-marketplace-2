@@ -11,7 +11,7 @@ export const Input = ({
   value: string;
   onChange: (str: string) => void;
   placeholder?: string;
-  type: "text" | "number";
+  type: "text" | "number" | "file";
 }) => {
   return (
     <div className="mb-5">
