@@ -141,20 +141,33 @@ export const sendAssetMail = async (
     select: { asset: true },
     where: { id: productId },
   });
-  // console.log("product asset in mail ", product);
-  // return;
-  const { data, error } = await resend.emails.send({
-    from: "SolKart Delivery <Delivery@solkart.xyz>",
-    to: ["dheerajmanwani2000@gmail.com"],
-    subject: "Hello world",
-    react: EmailTemplate({ username: "User" }),
-    attachments: [{ filename: "Asset.zip", path: product?.asset }],
+
+  const buyer = await db.user.findFirst({
+    select: {
+      email: true,
+    },
+    where: {
+      id: buyerId,
+    },
   });
 
-  console.log("inside resend mail====]]]]]]]]]]]]", data, error);
+  // console.log("product asset in mail ", product);
+  // return;
+  if (buyer && buyer.email) {
+    const { data, error } = await resend.emails.send({
+      from: "SolKart Delivery <Delivery@solkart.xyz>",
+      to: [buyer.email],
+      subject: "Delivery from SolKart",
+      react: EmailTemplate({ username: "User" }),
+      attachments: [{ filename: "Asset.zip", path: product?.asset }],
+    });
 
-  if (error) {
-    return { success: false, message: "Something went wrong" };
+    console.log("inside resend mail====]]]]]]]]]]]]", data, error);
+
+    if (error) {
+      return { success: false, message: "Something went wrong" };
+    }
+    return { success: true };
   }
   return { success: true };
 };
