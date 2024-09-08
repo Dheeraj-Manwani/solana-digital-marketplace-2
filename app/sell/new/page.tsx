@@ -35,6 +35,11 @@ export default function NewProduct() {
   }, [session.status]);
 
   const handleSubmit = async () => {
+    if (session.status !== AUTH.AUTHENTICATED) {
+      toast.warning("You need to signup/login to post a proguct");
+      return;
+    }
+
     if (!publicKey) {
       toast.error("Please connect a wallet for payment");
       return;
@@ -42,6 +47,11 @@ export default function NewProduct() {
 
     if (!asset) {
       toast.error("Upload the product to sell");
+      return;
+    }
+
+    if (!asset.name.endsWith("zip")) {
+      toast.error("The product must be a zip of the product");
       return;
     }
 
@@ -98,7 +108,7 @@ export default function NewProduct() {
   };
 
   return (
-    <div className="pt-24 pb-52 bg-gray-900">
+    <div className="pt-24 pb-32 ">
       <div className="w-full flex justify-center">
         <h1 className="mt-2 mb-4 text-2xl font-bold leading-none tracking-tight md:text-5xl lg:text-4xl text-white">
           Post a{" "}
@@ -146,7 +156,7 @@ export default function NewProduct() {
           label="Product Images (watermarked / for user's reference)"
         />
 
-        <Attachment label="Product *" value={asset} onChange={setAsset} />
+        <Attachment label="Product zip*" value={asset} onChange={setAsset} />
         <AlertWarning />
 
         <div className="mt-10 flex justify-center">

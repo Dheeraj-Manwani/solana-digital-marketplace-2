@@ -8,8 +8,8 @@ export default function Products() {
   return (
     <Hero
       dataObj={HEADER_DATA.sell}
-      linkBtn={{ text: "Start selling", href: "/seller/new" }}
-      btn={{ text: "Seller Dashboard", href: "/seller/dashboard" }}
+      linkBtn={{ text: "Start Selling Today", href: "/sell/new" }}
+      // btn={{ text: "Seller Dashboard", href: "/seller/dashboard" }}
     />
   );
 }

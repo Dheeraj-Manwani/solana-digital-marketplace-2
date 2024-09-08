@@ -4,25 +4,22 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "./Button";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-// import {
-//   WalletDisconnectButton,
-//   WalletMultiButton,
-// } from "@solana/wallet-adapter-react-ui";
-// import { useWallet } from "@solana/wallet-adapter-react";
+import logo from "@/public/sol-kart-logo.png";
+import Image from "next/image";
 
 export const Appbar = () => {
   const session = useSession();
   const pathname = usePathname();
-  //   const { publicKey } = useWallet();
   const isActive = (path: string | undefined) => path === pathname;
 
   return (
-    <nav className=" bg-gray-900 fixed w-full z-20 top-0 start-0 border-b  border-gray-600">
+    <nav className=" fixed w-full z-20 top-0 start-0 border-b  border-gray-600 bg-black">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse w-10"
         >
+          <Image src={logo} height={200} width={200} alt="Solkart logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
             SolKart
           </span>
@@ -77,7 +74,7 @@ export const Appbar = () => {
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  bg-gray-800 md:bg-gray-900 border-gray-700">
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  border-gray-700">
             <li>
               <a
                 href="/"
@@ -100,7 +97,7 @@ export const Appbar = () => {
                 Products
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="/contact"
                 className={twMerge(
@@ -110,13 +107,15 @@ export const Appbar = () => {
               >
                 Contact
               </a>
-            </li>
+            </li> */}
             <li>
               <a
-                href="/seller"
+                href="/sell"
                 className={twMerge(
                   "block py-2 px-3 text-white bg-blue-700 md:hover:text-blue-500 rounded md:bg-transparent  md:p-0",
-                  isActive("/seller/new") ? "md:text-blue-500" : ""
+                  isActive("/sell/new") || isActive("/sell")
+                    ? "md:text-blue-500"
+                    : ""
                 )}
               >
                 Sell

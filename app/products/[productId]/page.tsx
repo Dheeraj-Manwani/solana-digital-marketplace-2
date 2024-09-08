@@ -35,6 +35,7 @@ export default function Products({
   });
 
   const handleBuy = async () => {
+    console.log("session ", session);
     if (session.status !== AUTH.AUTHENTICATED || !session.data?.user?.email) {
       toast.error("Log in first to buy a product");
     }
@@ -79,8 +80,6 @@ export default function Products({
       });
 
       const verify = await verifyTransactionSignature(signature);
-      toast.success("Transaction Successfull!", { id: toastId });
-
       if (verify) {
         await sendAssetMail(
           product.sellerId,
@@ -88,6 +87,7 @@ export default function Products({
           // @ts-expect-error aaaaaaaaaaaaaa
           session.data?.user.uid
         );
+        toast.success("Transaction Successfull!", { id: toastId });
         router.push("/success");
       } else {
         toast.error("Sorry, We were'nt able to verify the transaction");
@@ -116,7 +116,7 @@ export default function Products({
   }, []);
 
   return (
-    <section className=" bg-gray-900 pt-10 pb-56  w-full ">
+    <section className=" pt-10 pb-56  w-full ">
       <FullProduct
         id={product.id}
         title={product.title}

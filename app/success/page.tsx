@@ -1,11 +1,18 @@
 "use client";
-import React from "react";
+// import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
 
 export default function Success() {
   const router = useRouter();
+  // useEffect(() => {
+  //   toast.info(
+  //     "There is some problem with Resend API, so the mail won't reach you."
+  //   );
+  // });
+
   return (
-    <section className=" bg-gray-900 pt-24 w-screen h-screen">
+    <section className=" bg pt-24 w-screen h-screen">
       <div className="mt-16 bg-gray-100  w-1/3 m-auto">
         <div className="bg-white p-6  md:mx-auto">
           <svg
@@ -25,7 +32,7 @@ export default function Success() {
               Payment has been done, Your purchase will reach you via your
               Email.
             </p>
-            <p> Have a great day! </p>
+            <p className="text-gray-900"> Have a great day! </p>
             <div className="py-10 text-center">
               <div
                 className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 cursor-pointer"

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Appbar } from "./components/Appbar";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
+import { Footer } from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           <Toaster richColors position="bottom-center" />
           <Appbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

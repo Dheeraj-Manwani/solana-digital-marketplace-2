@@ -137,11 +137,18 @@ export const sendAssetMail = async (
   productId: number,
   buyerId: number
 ) => {
+  const product = await db.product.findFirst({
+    select: { asset: true },
+    where: { id: productId },
+  });
+  // console.log("product asset in mail ", product);
+  // return;
   const { data, error } = await resend.emails.send({
-    from: "dkmanwani2000@gmail.com",
+    from: "SolKart Delivery <Delivery@solkart.xyz>",
     to: ["dheerajmanwani2000@gmail.com"],
     subject: "Hello world",
-    react: EmailTemplate({ username: "John" }),
+    react: EmailTemplate({ username: "User" }),
+    attachments: [{ filename: "Asset.zip", path: product?.asset }],
   });
 
   console.log("inside resend mail====]]]]]]]]]]]]", data, error);
