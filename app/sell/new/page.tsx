@@ -126,7 +126,7 @@ export default function NewProduct() {
           onChange={setTitle}
         />
         <div className="flex justify-between w-full flex-col lg:flex-row">
-          <div className=" w-full ld:w-1/2">
+          <div className=" w-full lg:w-1/2">
             <Input
               type="number"
               label="Product Cost in SOL"
