@@ -8,7 +8,7 @@ import { ProductCard } from "../components/ProductCard";
 export default async function Products() {
   const products = await getProducts();
   return (
-    <section className=" pt-24 pb-24 w-full">
+    <section className=" pt-24 pb-24">
       <div className="w-full flex justify-center">
         <h1 className="mt-2 mb-8 text-2xl font-bold leading-none tracking-tight md:text-5xl lg:text-4xl text-white">
           Buy some{" "}

@@ -117,7 +117,7 @@ export default function NewProduct() {
           </span>
         </h1>
       </div>
-      <form className="w-1/2 m-auto">
+      <form className="w-10/12 md:w-3/5 lg:w-1/2 m-auto">
         <Input
           type="text"
           label="Product Title"
@@ -125,8 +125,8 @@ export default function NewProduct() {
           value={title}
           onChange={setTitle}
         />
-        <div className="flex justify-between w-full ">
-          <div className="w-1/2">
+        <div className="flex justify-between w-full flex-col lg:flex-row">
+          <div className=" w-full ld:w-1/2">
             <Input
               type="number"
               label="Product Cost in SOL"
@@ -135,11 +135,11 @@ export default function NewProduct() {
               onChange={setCost}
             />
           </div>
-          <div className="flex gap-5">
+          <div className="flex gap-5 pb-6 pt-2 lg:py-0">
             <div className=" text-sm font-medium  text-white my-auto">
               Recieving wallet:{" "}
             </div>
-            <div className="m-auto">
+            <div className="my-auto">
               <WalletMultiButton />
             </div>
           </div>

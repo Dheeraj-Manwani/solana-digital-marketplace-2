@@ -21,7 +21,7 @@ export const ProductCard = ({
 }) => {
   return (
     <div
-      className="w-full min-h-52 m-auto flex flex-col items-center border  rounded-lg shadow md:flex-row md:max-w-2xl  border-gray-700 bg-gray-800 "
+      className="w-80 min-h-52 m-auto flex flex-col items-center border  rounded-lg shadow md:flex-row md:max-w-2xl  border-gray-700 bg-gray-800 md:w-full"
       key={id}
     >
       {/* {images.map((i) => (
@@ -41,7 +41,7 @@ export const ProductCard = ({
         src={images[0]}
         alt=""
       /> */}
-      <div className="flex flex-col w-full min-h-[240px] p-4 leading-normal justify-between">
+      <div className="flex flex-col w-full min-h-10  p-4 leading-normal justify-between md:min-h-[240px]">
         <div className="flex flex-col justify-between">
           <h5 className="mb-2 text-2xl font-bold tracking-tight  text-white">
             {title}

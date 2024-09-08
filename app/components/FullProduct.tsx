@@ -125,7 +125,7 @@ export const FullProduct = ({
               </div>
             </div>
 
-            <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+            <div className="mt-6 gap-4  flex sm:mt-8">
               <Button onClick={() => handleBuy()}>Buy Now </Button>
 
               <WalletMultiButton />

@@ -91,8 +91,8 @@ export function MultiFilepnd({
       >
         {label}
       </label>
-      <div className="flex gap-5">
-        <div className="flex gap-5">
+      <div className="flex flex-col gap-5 md:flex-row">
+        <div className="flex flex-col gap-5 md:flex-row">
           {src && src.length ? (
             src.map((href) => (
               <div key={uuidv4()}>
