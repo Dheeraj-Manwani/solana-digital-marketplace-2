@@ -38,6 +38,7 @@ export default function Products({
     console.log("session ", session);
     if (session.status !== AUTH.AUTHENTICATED || !session.data?.user?.email) {
       toast.error("Log in first to buy a product");
+      return;
     }
     if (product.sellerId === 0 || !product.sellerPublicKey) {
       toast.error("Cannot buy the product, seller's key is not present");
