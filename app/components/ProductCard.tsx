@@ -46,7 +46,13 @@ export const ProductCard = ({
           <h5 className="mb-2 text-2xl font-bold tracking-tight  text-white">
             {title}
           </h5>
-          <p className="mb-3 font-normal  text-gray-400">{description}</p>
+          {description && (
+            <p className="mb-3 font-normal  text-gray-400">
+              {description.length > 150
+                ? description.substring(0, 150) + "..."
+                : description}
+            </p>
+          )}
         </div>
         <div className="flex justify-between w-full">
           <span className="text-3xl font-bold  text-white">
